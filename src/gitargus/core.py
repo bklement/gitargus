@@ -157,7 +157,7 @@ class Repository():
     def getStatus(self):
         stdout = self.__cli.run(["git", "status", "-sb"])
         if stdout is None:
-            return { self.__name: {
+            return {self.__name: {
                 "timestamp": self.__timestamp(),
                 "state": "FAILED_UPDATE"
             }}
@@ -180,7 +180,7 @@ class Repository():
                 clean = False
             else:
                 clean = True
-            return { self.__name: {
+            return {self.__name: {
                 "timestamp": self.__timestamp(),
                 "local": local,
                 "remote": remote,

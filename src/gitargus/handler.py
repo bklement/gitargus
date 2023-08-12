@@ -10,21 +10,20 @@ class RepositoryHandler(FileSystemEventHandler):
         self.__repository = repository
         self.__queue = queue
         logging.debug(
-             "Created handler for {}."
-             .format(repository.name())
+            "Created handler for {}."
+            .format(repository.name())
         )
 
     def on_any_event(self, event):
         logging.debug(
-             "{} event recieved for {}."
-             .format(event.event_type, event.src_path)
+            "{} event recieved for {}."
+            .format(event.event_type, event.src_path)
         )
         if (not event.is_directory
-            and "/.#" not in event.src_path
-            and ".git" not in event.src_path
-            and event.event_type != "created"
-            and not self.__repository.isIgnored(event.src_path)
-        ):
+                and "/.#" not in event.src_path
+                and ".git" not in event.src_path
+                and event.event_type != "created"
+                and not self.__repository.isIgnored(event.src_path)):
             logging.debug(
                 "Creating RepositoryLocalUpdateJob for {}."
                 .format(self.__repository.name())
