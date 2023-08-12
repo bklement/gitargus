@@ -10,22 +10,40 @@ from messaging import SQSListener
 if __name__ == '__main__':
     logging.info("Daemon starting.")
     config = Config(WORK_DIR + "/config.yml")
-    workspace = Workspace(config.root(), config.repositories(), config.timezone())
+    workspace = Workspace(
+        config.root(),
+        config.repositories(),
+        config.timezone()
+    )
     queue = Queue(100)
 
-    jobRunner = JobRunner(WORK_DIR, queue, Dynamodb(config.hostname(), config.table()))
+    jobRunner = JobRunner(
+        WORK_DIR,
+        queue,
+        Dynamodb(config.hostname(), config.table())
+    )
     jobRunner.removeLock()
     runnerProcess = Process(target=jobRunner.start)
     runnerProcess.start()
 
     queue.put(WorkspaceFullUpdateJob(workspace))
 
-    listenerProcess = Process(target=SQSListener(config.hostname(), workspace, queue, config.queue()).listen)
+    sqsListener = SQSListener(
+        config.hostname(),
+        workspace,
+        queue,
+        config.queue()
+    )
+    listenerProcess = Process(target=sqsListener.listen)
     listenerProcess.start()
 
     observer = Observer()
     for repository in workspace.getRepositories():
-        observer.schedule(RepositoryHandler(repository, queue), config.root() + "/" + repository.name(), recursive=True)
+        observer.schedule(
+            RepositoryHandler(repository, queue),
+            config.root() + "/" + repository.name(),
+            recursive=True
+        )
     observer.start()
 
     try:
@@ -38,13 +56,3 @@ if __name__ == '__main__':
     listenerProcess.join()
     runnerProcess.join()
     logging.info("Daemon exited.")
-    
-
-
-
-
-
-
-
-
-

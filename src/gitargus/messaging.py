@@ -6,6 +6,7 @@ from jobs import RepositoryFullUpdateJob
 from multiprocessing import Queue
 from core import Workspace, logging
 
+
 class Listener(ABC):
 
     def __init__(self, queueName: str):
@@ -15,17 +16,25 @@ class Listener(ABC):
     def listen(self):
         pass
 
+
 class SQSListener(Listener):
 
     def __init__(self, hostname: str, workspace: Workspace, queue: Queue, queueName: str):
         self.__hostname = hostname
         self.__workspace = workspace
         self.__queue = queue
-        self.__queueUrl = boto3.client("sqs").get_queue_url(QueueName=queueName)['QueueUrl']
-        logging.info("Purging SQS queue {}, sleeping for 60 seconds to complete.".format(queueName))
+        response = boto3.client("sqs").get_queue_url(QueueName=queueName)
+        self.__queueUrl = response['QueueUrl']
+        logging.info(
+            "Purging SQS queue {}, sleeping for 60 seconds to complete."
+            .format(queueName)
+        )
         boto3.client("sqs").purge_queue(QueueUrl=self.__queueUrl)
         time.sleep(60)
-        logging.info("Purged SQS queue {}.".format(queueName))
+        logging.info(
+            "Purged SQS queue {}."
+            .format(queueName)
+        )
 
     def listen(self):
         sqs = boto3.client("sqs")
@@ -43,18 +52,30 @@ class SQSListener(Listener):
                 receiptHandle = message["ReceiptHandle"]
                 body = json.loads(message["Body"])
 
-                logging.info("Message recieved from SQS: {}".format(body["Message"]))
-                jobDescription = json.loads(body["Message"])               
+                logging.info(
+                    "Message recieved from SQS: {}"
+                    .format(body["Message"])
+                )
+                jobDescription = json.loads(body["Message"])
 
                 if jobDescription["source"] != self.__hostname:
-                    logging.info("Processing message from {}.".format(jobDescription["source"]))
+                    logging.info(
+                        "Processing message from {}."
+                        .format(jobDescription["source"])
+                    )
                     if jobDescription["type"] == "RepositoryFullUpdateJob":
                         job = RepositoryFullUpdateJob(self.__workspace.getRepository(jobDescription["repository"]))
                         self.__queue.put(job, block=False, timeout=2)
                     else:
-                        logging.warn("Unrecognized job type {}.".format(jobDescription["type"]))
+                        logging.warn(
+                            "Unrecognized job type {}."
+                            .format(jobDescription["type"])
+                        )
                 else:
-                    logging.info("Message originated from {}, skipping.".format(jobDescription["source"]))
+                    logging.info(
+                        "Message originated from {}, skipping."
+                        .format(jobDescription["source"])
+                    )
 
                 logging.debug("Deleting message from SQS.")
                 sqs.delete_message(

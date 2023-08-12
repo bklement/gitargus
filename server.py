@@ -6,8 +6,9 @@ app = FastAPI()
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('git')
 
+
 @app.get("/{hostname}")
-async def get(hostname : str):
+async def get(hostname: str):
     print(hostname)
     response = table.get_item(Key={"hostname": hostname})
     length = int(response["ResponseMetadata"]["HTTPHeaders"]["content-length"])
@@ -15,4 +16,3 @@ async def get(hostname : str):
         raise HTTPException(status_code=404, detail="Item not found")
     else:
         return response["Item"]
-    

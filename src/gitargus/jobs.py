@@ -6,6 +6,7 @@ from persistence import Database
 from multiprocessing import Queue
 import time
 
+
 class Job(ABC):
 
     def __init__(self):
@@ -19,6 +20,7 @@ class Job(ABC):
     @abstractmethod
     def run(self, database: Database):
         pass
+
 
 class JobRunner():
 
@@ -42,7 +44,7 @@ class JobRunner():
                 logging.debug("Creating lock file.")
                 open(self.__lockFile, "x").close()
                 break
-            except FileExistsError as e:
+            except FileExistsError:
                 logging.debug("Lock file already exists, sleeping.")
                 time.sleep(1)
 
@@ -55,7 +57,6 @@ class JobRunner():
             logging.error(e)
         finally:
             self.removeLock()
-            
 
     def start(self):
         logging.debug("Starting JobRunner.")
@@ -66,6 +67,7 @@ class JobRunner():
                 break
             logging.debug("Job received, executing")
             self.__execute(job)
+
 
 class WorkspaceUpdateJob(Job):
 
@@ -81,17 +83,21 @@ class WorkspaceUpdateJob(Job):
         database.save(results)
         logging.info("Success.")
         logging.info("Iteration finished.")
+
+
 class WorkspaceLocalUpdateJob(WorkspaceUpdateJob):
 
     def __init__(self, workspace: Workspace):
         super().__init__(workspace, False)
         logging.debug("WorkspaceLocalUpdateJob created.")
 
+
 class WorkspaceFullUpdateJob(WorkspaceUpdateJob):
 
     def __init__(self, workspace: Workspace):
         super().__init__(workspace, True)
         logging.debug("WorkspaceFullUpdateJob created.")
+
 
 class RepositoryUpdateJob(Job):
 
@@ -101,7 +107,10 @@ class RepositoryUpdateJob(Job):
         self.__fetch = fetch
 
     def run(self, database: Database):
-        logging.info("Updating repository {}.".format(self.__repository.name()))
+        logging.info(
+            "Updating repository {}."
+            .format(self.__repository.name())
+        )
         if self.__fetch:
             self.__repository.fetch()
         results = self.__repository.getStatus()
@@ -109,14 +118,22 @@ class RepositoryUpdateJob(Job):
         database.update(self.__repository.name(), results)
         logging.info("Success.")
 
+
 class RepositoryLocalUpdateJob(RepositoryUpdateJob):
 
     def __init__(self, repository: Repository):
         super().__init__(repository, False)
-        logging.debug("RepositoryLocalUpdateJob created for {}.".format(repository.name()))
+        logging.debug(
+            "RepositoryLocalUpdateJob created for {}."
+            .format(repository.name())
+        )
+
 
 class RepositoryFullUpdateJob(RepositoryUpdateJob):
 
     def __init__(self, repository: Repository):
         super().__init__(repository, True)
-        logging.debug("RepositoryFullUpdateJob created for {}.".format(repository.name()))
+        logging.debug(
+            "RepositoryFullUpdateJob created for {}."
+            .format(repository.name())
+        )
