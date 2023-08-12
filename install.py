@@ -7,8 +7,10 @@ pythonPath = CLI("/").run(["which", "python3"])
 print(pythonPath)
 
 for repository in config.repositories():
-    f = open(config.root() + "/" + repository + "/.git/hooks/pre-push", "w")
+    filename = config.root() + "/" + repository + "/.git/hooks/pre-push"
+    f = open(filename, "w")
     f.write("#!" + pythonPath)
     f.write("from gitargus import hooks\n\n")
     f.write("hooks.pre_push()\n")
     f.close()
+    CLI("/").run(["chmod", "+x", filename])
