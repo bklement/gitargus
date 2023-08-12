@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gitargus"
+version = "1.0.0-alpha"
+authors = [
+  { name="Balázs Klement", email="dev@bklement.com" },
+]
+description = "Helps avoiding conflicts for git repositories when using multiple computers."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Unix",
+    "Development Status :: 3 - Alpha"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/pypa/sampleproject"
+"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"

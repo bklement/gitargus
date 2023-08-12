@@ -1,0 +1,23 @@
+#!/opt/homebrew/bin/python3.11
+import boto3
+import uuid
+import os
+import yaml
+import json
+
+with open(os.path.expanduser('~') + "/.git-watcher/config.yml", "r") as configFile:
+    config = yaml.safe_load(configFile)
+    root = config["root"] + "/"
+    arn = config["aws"]["sns"]["topic"]["arn"]
+    hostname = config["hostname"]
+
+message = { "source": hostname, "type": "RepositoryFullUpdateJob", "repository": os.getcwd().replace(root, "")}
+sns = boto3.client('sns')
+sns.publish(
+    TopicArn=arn,
+    Message=json.dumps(message),
+    MessageGroupId="git",
+    MessageDeduplicationId=uuid.uuid4().hex
+)
+
+exit(0)
