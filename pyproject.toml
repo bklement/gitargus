@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gitargus"
-version = "1.0.0-alpha"
+version = "1.0.0-alpha4"
 authors = [
   { name="Balázs Klement", email="dev@bklement.com" },
 ]

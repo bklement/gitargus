@@ -1,11 +1,12 @@
-from jobs import WorkspaceFullUpdateJob, JobRunner
-from core import Workspace, Config, WORK_DIR, logging
-from persistence import Dynamodb
+from gitargus.jobs import WorkspaceFullUpdateJob, JobRunner
+from gitargus.core import Workspace, Config, WORK_DIR, logging
+from gitargus.persistence import Dynamodb
+from gitargus.handler import RepositoryHandler
+from gitargus.messaging import SQSListener
 from watchdog.observers import Observer
 import time
 from multiprocessing import Queue, Process
-from handler import RepositoryHandler
-from messaging import SQSListener
+
 
 if __name__ == '__main__':
     logging.info("Daemon starting.")

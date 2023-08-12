@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 import boto3
 import time
 import json
-from jobs import RepositoryFullUpdateJob
+from gitargus.jobs import RepositoryFullUpdateJob
 from multiprocessing import Queue
-from core import Workspace, logging
+from gitargus.core import Workspace, logging
 
 
 class Listener(ABC):

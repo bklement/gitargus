@@ -1,8 +1,8 @@
 import os
 from abc import ABC, abstractmethod
 import urllib.request
-from core import Workspace, Repository, logging, WORK_DIR
-from persistence import Database
+from gitargus.core import Workspace, Repository, logging, WORK_DIR
+from gitargus.persistence import Database
 from multiprocessing import Queue
 import time
 

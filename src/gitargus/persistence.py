@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from core import logging
+from gitargus.core import logging
 import boto3
 
 

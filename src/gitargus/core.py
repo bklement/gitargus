@@ -4,7 +4,8 @@ import yaml
 import logging
 import os
 from subprocess import run, CalledProcessError
-from pathspec import PathSpec, GitWildMatchPattern
+from pathspec import PathSpec
+from pathspec.patterns import GitWildMatchPattern
 
 WORK_DIR = os.path.expanduser('~') + "/.gitargus/"
 logging.basicConfig(filename=WORK_DIR + "gitargus.log",

@@ -1,7 +1,7 @@
-from core import logging, Repository
+from gitargus.core import logging, Repository
+from gitargus.jobs import RepositoryLocalUpdateJob
 from multiprocessing import Queue
 from watchdog.events import FileSystemEventHandler
-from jobs import RepositoryLocalUpdateJob
 
 
 class RepositoryHandler(FileSystemEventHandler):
