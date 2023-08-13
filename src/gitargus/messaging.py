@@ -24,17 +24,13 @@ class SQSListener(Listener):
         self.__workspace = workspace
         self.__queue = queue
         response = boto3.client("sqs").get_queue_url(QueueName=queueName)
-        self.__queueUrl = response['QueueUrl']
-        logging.info(
-            "Purging SQS queue {}, sleeping for 60 seconds to complete."
-            .format(queueName)
-        )
+        self.__queueUrl = response['QueueUrl']        
+
+    def purge(self):
+        logging.info("Purging SQS queue, sleeping for 60 seconds to complete.")
         boto3.client("sqs").purge_queue(QueueUrl=self.__queueUrl)
         time.sleep(60)
-        logging.info(
-            "Purged SQS queue {}."
-            .format(queueName)
-        )
+        logging.info("Purged SQS queue.")
 
     def listen(self):
         sqs = boto3.client("sqs")
