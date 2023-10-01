@@ -4,7 +4,7 @@ Python utility to synchronize state of git workspaces for developers who use mul
 
 ## Installation
 
-The alpha version is currently hosten at [TestPyPi](https://test.pypi.org/project/gitargus/). You have to install dependencies first from PyPi:
+The alpha version is currently hosted at [TestPyPi](https://test.pypi.org/project/gitargus/). You have to install dependencies first from PyPi:
 
 ```
 pip install yaml pytz json pathspec boto3
@@ -65,30 +65,38 @@ python:
 
 ## Hooks
 
-Currently has only one hook to notify other machines of a push. After creating a config file, the following snippet can be used to install the hook(s) into each of them:
+From alpha6 onwards, the daemon checks the existence of hooks on startup in the configured repositories. After updating the repository list in the configuration, a restart is necessary.
+
+## Useage
+
+You can start the daemon with the following command:
 
 ```
-from gitargus import install
-
-install.hooks()
+python -m gitargus
 ```
 
 ## Ubuntu Service
 
-A service file can be generated based on the config file using the following snippet:
+Create a service file at '/etc/systemd/system/gitargus@.service' with the following content:
 
 ```
-from gitargus import install
+[Unit]
+Description=GitArgus daemon for %i
 
-install.generateUbuntuServiceFile()
+[Service]
+User=%i
+ExecStart=/usr/bin/python -m gitargus
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-Then install the generated file:
+Then enable the service for the specific user:
 
 ```
-mv gitargus.service /etc/systemd/system/
 systemctl daemon-reload
-systemctl enable --now gitargus
+systemctl enable --now gitargus@user
 ```
 
 ## Logs
