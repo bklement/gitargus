@@ -19,7 +19,6 @@ def install():
 
 def pre_push():
     
-
     message = {
         "source": config.hostname(),
         "type": "RepositoryFullUpdateJob",
