@@ -9,8 +9,8 @@ from gitargus.core import Workspace, logging
 
 class Listener(ABC):
 
-    def __init__(self, queueName: str):
-        self.__queueName = queueName
+    def __init__(self):
+        pass
 
     @abstractmethod
     def listen(self):

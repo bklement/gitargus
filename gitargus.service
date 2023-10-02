@@ -1,0 +1,10 @@
+[Unit]
+Description=GitArgus daemon for %i
+
+[Service]
+User=%i
+ExecStart=/usr/bin/python3.11 -m gitargus
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
