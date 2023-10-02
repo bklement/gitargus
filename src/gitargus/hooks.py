@@ -1,4 +1,3 @@
-#!/opt/homebrew/bin/python3.11
 import boto3
 import uuid
 import os

@@ -10,13 +10,8 @@ import time
 class Job(ABC):
 
     def __init__(self):
-        try:
-            urllib.request.urlopen("http://github.com")
-        except Exception as e:
-            logging.warning("No internet connection, skipping iteration.")
-            print(e, flush=True)
-            exit(1)
-
+        self.createdAt = time.time()
+        
     @abstractmethod
     def run(self, database: Database):
         pass
@@ -61,9 +56,16 @@ class JobRunner():
     def start(self):
         logging.debug("Starting JobRunner.")
         while True:
+            try:
+                urllib.request.urlopen("http://github.com")
+            except Exception as e:
+                logging.warning("No internet connection, skipping iteration.")
+                time.sleep(60)
+                break
             logging.debug("Polling for job.")
             job = self.__queue.get()
             if job is None:
+                time.sleep(1)
                 break
             logging.debug("Job received, executing")
             self.__execute(job)
