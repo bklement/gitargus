@@ -7,7 +7,7 @@ Python utility to synchronize state of git workspaces for developers who use mul
 The alpha version is currently hosted at [TestPyPi](https://test.pypi.org/project/gitargus/). You have to install dependencies first from PyPi:
 
 ```
-pip install yaml pytz json pathspec boto3
+pip install pyyaml pytz json pathspec boto3
 ```
 
 Then install GitArgus:
