@@ -65,7 +65,7 @@ python:
 
 ## Hooks
 
-From alpha6 onwards, the daemon checks the existence of hooks on startup in the configured repositories. After updating the repository list in the configuration, a restart is necessary.
+From 1.0.0-alpha7 onwards, the daemon checks the existence of hooks on startup in the configured repositories. After updating the repository list in the configuration, a restart is necessary.
 
 ## Useage
 

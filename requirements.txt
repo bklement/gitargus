@@ -1,5 +1,5 @@
 boto3
-yaml
+pyyaml
 pytz
 pathspec
 watchdog
