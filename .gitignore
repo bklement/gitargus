@@ -9,7 +9,7 @@
 **/*.*latexmk
 **/*.fls
 
-__pychache__
+**/__pychache__
 **/.ipynb_checkpoints
 **/*.py[cod]
 **/*.out
@@ -22,3 +22,6 @@ dist
 bin
 build
 
+.coverage
+htmlcov
+.mutmut-cache

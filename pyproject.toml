@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gitargus"
-version = "1.0.0-alpha9"
+version = "1.0.0-beta1"
 authors = [
   { name="Balázs Klement", email="dev@bklement.com" }
 ]
@@ -20,9 +20,7 @@ classifiers = [
 dependencies = [
   "pyyaml",
   "boto3",
-  "pytz",
-  "pathspec",
-  "watchdog"
+  "pytz"
 ]
 
 [project.urls]
