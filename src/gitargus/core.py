@@ -62,36 +62,6 @@ class Config():
         return self.__config["aws"]["dynamodb"]["table"]
 
 
-class CLI():
-
-    def __init__(self, folder: str):
-        self.__folder = folder
-
-    def createFolder(self):
-        try:
-            p = run(["mkdir", "-p", self.__folder], check=True, capture_output=True, text=True)
-            return p.stdout
-        except CalledProcessError as e:
-            log("Error creating folder {}:\n{}".format(self.__folder, e))
-        except FileNotFoundError:
-            log("Tried to run command '{}', but it does not exist.".format("mkdir"))
-
-    def run(self, params: list, supressErrors: bool = False):
-        try:
-            os.chdir(self.__folder)
-        except FileNotFoundError:
-            log("Tried to change to folder '{}' but it does not exist.".format(self.__folder))
-        try:
-            p = run(params, check=True, capture_output=True, text=True)
-            return p.stdout
-        except CalledProcessError as e:
-            if not supressErrors:
-                log("Error running subprocess '{}' in '{}':\n{}".format(" ".join(params), os.getcwd(), e))
-        except FileNotFoundError:
-            if not supressErrors:
-                log("Tried to run command '{}', but it does not exist.".format(params[0]))
-
-
 class Dynamodb():
 
     def __init__(self, hostname: str, table: str):
